@@ -1,0 +1,58 @@
+name: Reverse Search
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/30 * * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: reverse-search
+  cancel-in-progress: false
+
+jobs:
+  fetch-addresses:
+    runs-on: ubuntu-latest
+    timeout-minutes: 29
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch Sodex addresses
+        run: |
+          python scripts/fetch_sodex_addresses.py
+        env:
+          START_USER_ID: "1000"
+          CHECKPOINT_EVERY: "1000"
+          MAX_CONSECUTIVE_MISSES: "10"
+          MAX_RUNTIME_SECONDS: "1500"
+          MIN_REQUEST_INTERVAL_SECONDS: "0.06"
+
+      - name: Commit updated CSV and state
+        if: always()
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if git diff --quiet -- data/; then
+            echo "No data changes to commit."
+            exit 0
+          fi
+
+          branch="${GITHUB_REF_NAME:-main}"
+
+          git add data/
+          git commit -m "chore: update Sodex reverse search data"
+          git pull --rebase origin "$branch"
+          git push origin HEAD:"$branch"
