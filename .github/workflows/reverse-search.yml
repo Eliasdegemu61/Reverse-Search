@@ -38,6 +38,14 @@ jobs:
           MAX_RUNTIME_SECONDS: "1500"
           MIN_REQUEST_INTERVAL_SECONDS: "0.06"
 
+      - name: Sync to Supabase
+        if: success()
+        run: |
+          python scripts/sync_to_supabase.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+
       - name: Commit updated CSV and state
         if: always()
         shell: bash
