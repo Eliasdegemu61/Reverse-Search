@@ -1,12 +1,12 @@
 {
-  "next_user_id": 223414,
+  "next_user_id": 223416,
   "consecutive_misses": 10,
-  "total_attempted": 226194,
-  "total_saved_rows": 222404,
-  "last_success_user_id": 223403,
-  "last_success_address": "0x3baC7cB25EB646BAF7E9B8515DB4a9733E256015",
-  "last_run_started_at": "2026-07-27T11:47:52Z",
-  "last_run_finished_at": "2026-07-27T11:47:55Z",
+  "total_attempted": 226206,
+  "total_saved_rows": 222406,
+  "last_success_user_id": 223405,
+  "last_success_address": "0xBABD0b3DE8480a65D0fb74C80e152c152d9D1631",
+  "last_run_started_at": "2026-07-27T14:03:30Z",
+  "last_run_finished_at": "2026-07-27T14:03:34Z",
   "last_stop_reason": "max_consecutive_misses_reached",
   "last_error": null
 }
